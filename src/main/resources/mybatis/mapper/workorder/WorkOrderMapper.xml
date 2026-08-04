@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inho.mespractice.workorder.repository.WorkOrderMapper">
+
+  <resultMap id="workOrderResultMap" type="com.inho.mespractice.workorder.entity.WorkOrder">
+    <id property="workOrderId" column="work_order_id"/>
+    <result property="workOrderNo" column="work_order_no"/>
+    <result property="itemId" column="item_id"/>
+    <result property="equipmentId" column="equipment_id"/>
+    <result property="planQty" column="plan_qty"/>
+    <result property="startDate" column="start_date"/>
+    <result property="endDate" column="end_date"/>
+    <result property="status" column="status"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="itemName" column="item_name"/>
+    <result property="equipmentName" column="equipment_name"/>
+  </resultMap>
+
+  <insert id="insertWorkOrder" useGeneratedKeys="true" keyProperty="workOrderId">
+    INSERT INTO work_order (work_order_id, item_id, equipment_id, plan_qty, start_date, end_date, status)
+    VALUES (#{workOrderNo}, #{itemId}, #{equipmentId}, #{planQty}, #{startDate}, #{endDate}, #{status})
+  </insert>
+
+  <select id="findById">
+    SELECT
+        wo.work_order_id, wo.work_order_no, wo.item_id, wo.equipment_id, wo.plan_qty, wo.start_date, wo.end_date, wo.status, wo.created_at,
+        i.item_name, e.equipment_name
+    FROM work_order wo
+    JOIN item i ON i.item_id = wo.item_id
+    JOIN equipment e ON e.equipment_id = wo.equipment_id
+    WHERE wo.work_order_id = (#{workOrderId})
+  </select>
+
+  <select id="search">
+    SELECT
+        wo.work_order_id, wo.work_order_no, wo.item_id, wo.equipment_id, wo.plan_qty, wo.start_date, wo.end_date, wo.status, wo.created_at,
+        i.item_name, e.equipment_name
+    FROM work_order wo
+    JOIN item i ON i.item_id = wo.item_id
+    JOIN equipment e ON e.equipment_id = wo.equipment_id
+    <where>
+      <if test="status != null">
+        AND wo.status = #{status}
+      </if>
+      <if test="itemId != null">
+        AND wo.item_id = #{itemId}
+      </if>
+      <if test="equipmentId != null">
+        AND wo.equipment_id = #{equipmentId}
+      </if>
+      <if test="fromDate != null">
+        AND wo.start_date = #{startDate}
+      </if>
+      <if test="toDate != null">
+        AND wo.end_date = #{endDate}
+      </if>
+    </where>
+    ORDER BY wo.work_order_id DESC
+  </select>
+
+  <update id="updateStats">
+    UPDATE work_order
+    SET status = #{status}
+    WHERE work_order_id = #{workOrderId}
+  </update>
+
+  <delete id="deleteById">
+    DELETE FROM work_order
+    WHERE work_order_id = #{workOrderId}
+  </delete>
+
+</mapper>

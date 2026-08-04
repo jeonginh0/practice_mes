@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inho.mespractice.equipment.repository.EquipmentMapper">
+
+  <resultMap id="equipmentResultMap" type="com.inho.mespractice.equipment.entity.Equipment">
+    <id property="equipmentId" column="equipment_id"/>
+    <result property="equipmentCode" column="equipment_code"/>
+    <result property="equipmentName" column="equipment_name"/>
+    <result property="status" column="status"/>
+  </resultMap>
+
+  <insert id="insertEquipment" useGeneratedKeys="true" keyProperty="equipmentId">
+    INSERT INTO equipment (equipment_code, equipment_name, status)
+    VALUES (#{equipmentCode}, #{equipmentName}, #{status})
+  </insert>
+
+  <select id="findById" resultMap="equipmentResultMap">
+    SELECT equipment_id, equipment_code, equipment_name, status
+    FROM equipment
+    WHERE equipment_id = #{equipmentId}
+  </select>
+
+  <select id="findAll" resultMap="equipmentResultMap">
+    SELECT equipment_id, equipment_code, equipment_name, status
+    FROM equipment
+    ORDER BY equipment_id
+  </select>
+
+  <update id="updateStatus">
+    UPDATE equipment
+    SET status = #{status}
+    WHERE equipment_id = #{equipmentId}
+  </update>
+
+  <delete id="deleteById">
+    DELETE FROM equipment
+    WHERE equipment_id = #{equipmentId}
+  </delete>
+</mapper>
