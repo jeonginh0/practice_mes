@@ -19,11 +19,11 @@
   </resultMap>
 
   <insert id="insertWorkOrder" useGeneratedKeys="true" keyProperty="workOrderId">
-    INSERT INTO work_order (work_order_id, item_id, equipment_id, plan_qty, start_date, end_date, status)
+    INSERT INTO work_order (work_order_no, item_id, equipment_id, plan_qty, start_date, end_date, status)
     VALUES (#{workOrderNo}, #{itemId}, #{equipmentId}, #{planQty}, #{startDate}, #{endDate}, #{status})
   </insert>
 
-  <select id="findById">
+  <select id="findById" resultMap="workOrderResultMap">
     SELECT
         wo.work_order_id, wo.work_order_no, wo.item_id, wo.equipment_id, wo.plan_qty, wo.start_date, wo.end_date, wo.status, wo.created_at,
         i.item_name, e.equipment_name
@@ -33,7 +33,7 @@
     WHERE wo.work_order_id = (#{workOrderId})
   </select>
 
-  <select id="search">
+  <select id="search" resultMap="workOrderResultMap">
     SELECT
         wo.work_order_id, wo.work_order_no, wo.item_id, wo.equipment_id, wo.plan_qty, wo.start_date, wo.end_date, wo.status, wo.created_at,
         i.item_name, e.equipment_name
@@ -51,16 +51,16 @@
         AND wo.equipment_id = #{equipmentId}
       </if>
       <if test="fromDate != null">
-        AND wo.start_date = #{startDate}
+        AND wo.start_date = #{fromDate}
       </if>
       <if test="toDate != null">
-        AND wo.end_date = #{endDate}
+        AND wo.end_date = #{toDate}
       </if>
     </where>
     ORDER BY wo.work_order_id DESC
   </select>
 
-  <update id="updateStats">
+  <update id="updateStatus">
     UPDATE work_order
     SET status = #{status}
     WHERE work_order_id = #{workOrderId}
