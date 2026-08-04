@@ -2,6 +2,7 @@ package com.inho.mespractice.workorder.repository;
 
 import com.inho.mespractice.workorder.dto.WorkOrderSearchCondition;
 import com.inho.mespractice.workorder.entity.WorkOrder;
+import com.inho.mespractice.workorder.entity.WorkOrderStatus;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class WorkOrderRepositoryImpl implements WorkOrderRepository {
     }
 
     @Override
-    public void updateStatus(Long workOrderId, String status) {
+    public void updateStatus(Long workOrderId, WorkOrderStatus status) {
         workOrderMapper.updateStatus(workOrderId, status);
     }
 

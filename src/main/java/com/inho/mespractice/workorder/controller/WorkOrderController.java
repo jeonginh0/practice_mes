@@ -2,6 +2,7 @@ package com.inho.mespractice.workorder.controller;
 
 import com.inho.mespractice.workorder.dto.WorkOrderSearchCondition;
 import com.inho.mespractice.workorder.entity.WorkOrder;
+import com.inho.mespractice.workorder.entity.WorkOrderStatus;
 import com.inho.mespractice.workorder.service.WorkOrderService;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,7 +35,7 @@ public class WorkOrderController {
 
     @GetMapping
     public List<WorkOrder> search(
-        @RequestParam(required = false) String status,
+        @RequestParam(required = false) WorkOrderStatus status,
         @RequestParam(required = false) Long itemId,
         @RequestParam(required = false) Long equipmentId,
         @RequestParam(required = false) LocalDate fromDate,
@@ -45,7 +46,7 @@ public class WorkOrderController {
     }
 
     @PutMapping("/{id}/status")
-    public void changeStatus(@PathVariable Long id, @RequestParam String status) {
+    public void changeStatus(@PathVariable Long id, @RequestParam WorkOrderStatus status) {
         workOrderService.changeStatus(id, status);
     }
 

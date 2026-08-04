@@ -13,7 +13,7 @@ public class WorkOrder {
     private Integer planQty;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status;
+    private WorkOrderStatus status;
     private LocalDateTime createdAt;
 
     // Join 결과로만 채워짐

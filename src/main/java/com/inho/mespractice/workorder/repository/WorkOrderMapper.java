@@ -2,6 +2,7 @@ package com.inho.mespractice.workorder.repository;
 
 import com.inho.mespractice.workorder.dto.WorkOrderSearchCondition;
 import com.inho.mespractice.workorder.entity.WorkOrder;
+import com.inho.mespractice.workorder.entity.WorkOrderStatus;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ public interface WorkOrderMapper {
 
     List<WorkOrder> search(WorkOrderSearchCondition condition);
 
-    int updateStatus(@Param("workOrderId") Long workOrderId, @Param("status") String status);
+    int updateStatus(@Param("workOrderId") Long workOrderId, @Param("status") WorkOrderStatus status);
 
     int deleteById(@Param("workOrderId") Long workOrderId);
 }
