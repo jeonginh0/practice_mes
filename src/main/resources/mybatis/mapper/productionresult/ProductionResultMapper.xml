@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inho.mespractice.productionresult.repository.ProductionResultMapper">
+
+  <resultMap id="productionResultMap" type="com.inho.mespractice.productionresult.entity.ProductionResult">
+    <id property="resultId" column="result_id" />
+    <result property="workOrderId" column="work_order_id" />
+    <result property="prodQty" column="prod_qty" />
+    <result property="defectQty" column="defect_qty" />
+    <result property="resultDate" column="result_date" />
+    <result property="workerName" column="worker_name"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <insert id="insertResult" useGeneratedKeys="true" keyProperty="resultId">
+    INSERT INTO production_result (work_order_id, prod_qty, defect_qty, result_date, worker_name)
+    VALUES (#{workOrderId}, #{prodQty}, #{defectQty}, #{resultDate}, #{workerName})
+  </insert>
+
+  <insert id="insertResultsBatch">
+    INSERT INTO production_result (work_order_id, prod_qty, defect_qty, result_date, worker_name)
+    VALUES
+        <foreach collection="results" item="r" separator=",">
+          (#{r.workOrderId}, #{r.prodQty}, #{r.defectQty}, #{r.resultDate}, #{r.workerName})
+        </foreach>
+  </insert>
+
+  <select id="findByWorkOrderId" resultMap="productionResultMap">
+    SELECT result_id, work_order_id, prod_qty, defect_qty, result_date, worker_name, created_at
+    FROM production_result
+    WHERE work_order_id = #{workOrderId}
+    ORDER BY result_date, result_id
+  </select>
+
+  <select id="getDailySummary" resultType="com.inho.mespractice.productionresult.dto.DailySummary">
+    SELECT
+        result_date AS resultDate,
+        SUM(prod_qty) AS totalProdQty,
+        SUM(defect_qty) AS totalDefectQty
+    FROM production_result
+    WHERE result_date BETWEEN #{fromDate} AND #{toDate}
+    GROUP BY result_date
+    ORDER BY result_date
+  </select>
+
+</mapper>
